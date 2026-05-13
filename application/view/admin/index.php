@@ -21,6 +21,7 @@
                     <td>Username</td>
                     <td>User's email</td>
                     <td>Activated ?</td>
+                    <td>Group</td>
                     <td>Link to user's profile</td>
                     <td>suspension Time in days</td>
                     <td>Soft delete</td>
@@ -37,6 +38,7 @@
                         </td>
                         <td><?= $user->user_name; ?></td>
                         <td><?= $user->user_email; ?></td>
+                        <td><?= $user->group_name; ?></td>
                         <td><?= ($user->user_active == 0 ? 'No' : 'Yes'); ?></td>
                         <td>
                             <a href="<?= Config::get('URL') . 'profile/showProfile/' . $user->user_id; ?>">Profile</a>
@@ -46,6 +48,13 @@
                             <td><input type="checkbox" name="softDelete" <?php if ($user->user_deleted) { ?> checked <?php } ?> /></td>
                             <td>
                                 <input type="hidden" name="user_id" value="<?= $user->user_id; ?>" />
+                                <td>
+                                    <select name="group_Id">
+                                        <option value="1" <?= ($user->user_account_type == 1 ? 'selected' : ''); ?>>Gast</option>
+                                        <option value="2" <?= ($user->user_account_type == 2 ? 'selected' : ''); ?>>User</option>
+                                        <option value="7" <?= ($user->user_account_type == 7 ? 'selected' : ''); ?>>Admin</option>
+                                    </select>
+                                </td>
                                 <input type="submit" />
                             </td>
                         </form>
