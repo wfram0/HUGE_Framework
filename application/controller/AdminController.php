@@ -19,9 +19,16 @@ class AdminController extends Controller
      */
     public function index()
     {
-        $this->View->render('admin/index', array(
-                'users' => UserModel::getPublicProfilesOfAllUsers())
+        $groups = array(
+            1 => 'Gast',
+            2 => 'User',
+            7 => 'Admin'
         );
+
+        $this->View->render('admin/index', array(
+                'users' => UserModel::getPublicProfilesOfAllUsers(),
+                'groups' => $groups
+        ));
     }
 
     public function actionAccountSettings()
