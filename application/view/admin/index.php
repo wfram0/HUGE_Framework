@@ -15,25 +15,25 @@
         <div>
             <table class="overview-table">
                 <thead>
-                <tr>
-                    <td>Id</td>
-                    <td>Avatar</td>
-                    <td>Username</td>
-                    <td>User's email</td>
-                    <td>Activated ?</td>
-                    <td>Group</td>
-                    <td>Link to user's profile</td>
-                    <td>suspension Time in days</td>
-                    <td>Soft delete</td>
-                    <td>Submit</td>
-                </tr>
+                    <tr>
+                        <td>Id</td>
+                        <td>Avatar</td>
+                        <td>Username</td>
+                        <td>User's email</td>
+                        <td>Group</td>
+                        <td>Activated ?</td>
+                        <td>Link to user's profile</td>
+                        <td>suspension Time in days</td>
+                        <td>Soft delete</td>
+                        <td>Submit</td>
+                    </tr>
                 </thead>
                 <?php foreach ($this->users as $user) { ?>
                     <tr class="<?= ($user->user_active == 0 ? 'inactive' : 'active'); ?>">
                         <td><?= $user->user_id; ?></td>
                         <td class="avatar">
                             <?php if (isset($user->user_avatar_link)) { ?>
-                                <img src="<?= $user->user_avatar_link; ?>"/>
+                                <img src="<?= $user->user_avatar_link; ?>" />
                             <?php } ?>
                         </td>
                         <td><?= $user->user_name; ?></td>
@@ -43,21 +43,29 @@
                         <td>
                             <a href="<?= Config::get('URL') . 'profile/showProfile/' . $user->user_id; ?>">Profile</a>
                         </td>
-                        <form action="<?= config::get("URL"); ?>admin/actionAccountSettings" method="post">
-                            <td><input type="number" name="suspension" /></td>
-                            <td><input type="checkbox" name="softDelete" <?php if ($user->user_deleted) { ?> checked <?php } ?> /></td>
-                            <td>
+                        <td>
+                            <input type="number" name="suspension" />
+                        </td>
+
+                        <td>
+                            <input type="checkbox" name="softDelete" <?php if ($user->user_deleted) { ?> checked <?php } ?> />
+                        </td>
+
+                        <td>
+                            <form action="<?= Config::get("URL"); ?>admin/actionAccountSettings" method="post">
+
                                 <input type="hidden" name="user_id" value="<?= $user->user_id; ?>" />
-                                <td>
-                                    <select name="group_Id">
-                                        <option value="1" <?= ($user->user_account_type == 1 ? 'selected' : ''); ?>>Gast</option>
-                                        <option value="2" <?= ($user->user_account_type == 2 ? 'selected' : ''); ?>>User</option>
-                                        <option value="7" <?= ($user->user_account_type == 7 ? 'selected' : ''); ?>>Admin</option>
-                                    </select>
-                                </td>
-                                <input type="submit" />
-                            </td>
-                        </form>
+
+                                <select name="user_group">
+                                    <option value="1" <?= ($user->group_name == 1 ? 'selected' : ''); ?>>Gast</option>
+                                    <option value="2" <?= ($user->group_name == 2 ? 'selected' : ''); ?>>User</option>
+                                    <option value="7" <?= ($user->group_name == 7 ? 'selected' : ''); ?>>Admin</option>
+                                </select>
+
+                                <button type="submit">Submit</button>
+
+                            </form>
+                        </td>
                     </tr>
                 <?php } ?>
             </table>
