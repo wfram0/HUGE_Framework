@@ -13,7 +13,7 @@
             or suspend a user.
         </div>
         <div>
-            <table class="overview-table">
+            <table id="datatable" class="overview-table">
                 <thead>
                     <tr>
                         <td>Id</td>
