@@ -266,3 +266,46 @@ body {
 .red-text {
     color: red;
 }
+
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.message {
+    padding: 10px;
+    border-radius: 10px;
+    max-width: 60%;
+}
+
+.message.own {
+    align-self: flex-end;
+    background: #0084ff;
+    color: white;
+}
+
+.message.other {
+    align-self: flex-start;
+    background: #e4e6eb;
+}
+
+.message-badge {
+    background: red;
+    color: white !important;
+
+    border-radius: 50%;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 20px;
+    height: 20px;
+
+    font-size: 12px;
+    font-weight: bold;
+
+    margin-left: 5px;
+}
