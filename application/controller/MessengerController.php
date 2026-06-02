@@ -49,5 +49,46 @@ class MessengerController extends Controller
             );
         }
     }
+
+    public function group($group_id)
+    {
+        $group = GroupModel::getGroup($group_id);
+
+        $messages = MessageModel::getGroupConversation(
+            $group_id
+        );
+
+        $this->View->render(
+            'messenger/group',
+            array(
+                'group' => $group,
+                'messages' => $messages
+            )
+        );
+    }
+
+    public function sendgroup()
+    {
+        Session::init();
+
+        $sender_id = Session::get('user_id');
+
+        if (
+            isset($_POST['group_id']) &&
+            isset($_POST['message'])
+        ) {
+
+            MessageModel::sendGroupMessage(
+                $sender_id,
+                $_POST['group_id'],
+                trim($_POST['message'])
+            );
+
+            Redirect::to(
+                'messenger/group/' .
+                $_POST['group_id']
+            );
+        }
+    }
 }
 ?>

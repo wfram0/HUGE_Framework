@@ -76,5 +76,45 @@ class MessageModel
 
         return $result->amount;
     }
+
+    public static function sendGroupMessage($sender_id, $group_id, $message)
+    {
+        $database = DatabaseFactory::getFactory()->getConnection();
+
+        $sql = "INSERT INTO messages
+            (sender_id, group_id, message)
+            VALUES
+            (:sender_id, :group_id, :message)";
+
+        $query = $database->prepare($sql);
+
+        $query->execute(array(
+            ':sender_id' => $sender_id,
+            ':group_id' => $group_id,
+            ':message' => $message
+        ));
+    }
+
+    public static function getGroupConversation($group_id)
+    {
+        $database = DatabaseFactory::getFactory()->getConnection();
+
+        $sql = "SELECT
+                m.*,
+                u.user_name
+            FROM messages m
+            INNER JOIN users u
+                ON m.sender_id = u.user_id
+            WHERE m.group_id = :group_id
+            ORDER BY m.created_at ASC";
+
+        $query = $database->prepare($sql);
+
+        $query->execute(array(
+            ':group_id' => $group_id
+        ));
+
+        return $query->fetchAll();
+    }
 }
 ?>
