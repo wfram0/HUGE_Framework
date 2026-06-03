@@ -6,7 +6,7 @@ class GroupModel
     {
         $database = DatabaseFactory::getFactory()->getConnection();
 
-        $sql = "SELECT * FROM groups ORDER BY group_name";
+        $sql = "CALL sp_get_all_groups()";
 
         $query = $database->prepare($sql);
         $query->execute();
@@ -18,8 +18,9 @@ class GroupModel
     {
         $database = DatabaseFactory::getFactory()->getConnection();
 
-        $sql = "SELECT * FROM groups
-                WHERE group_id = :group_id";
+        $sql = "CALL sp_get_group(
+                    :group_id
+                )";
 
         $query = $database->prepare($sql);
 

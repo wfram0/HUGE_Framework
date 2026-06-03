@@ -5,9 +5,11 @@ class MessageModel
     {
         $database = DatabaseFactory::getFactory()->getConnection();
 
-        $sql = "INSERT INTO messages
-                (sender_id, receiver_id, message)
-                VALUES (:sender_id, :receiver_id, :message)";
+        $sql = "CALL sp_send_message(
+                    :sender_id,
+                    :receiver_id,
+                    :message
+                )";
 
         $query = $database->prepare($sql);
 
@@ -22,13 +24,10 @@ class MessageModel
     {
         $database = DatabaseFactory::getFactory()->getConnection();
 
-        $sql = "SELECT *
-                FROM messages
-                WHERE
-                    (sender_id = :user1 AND receiver_id = :user2)
-                OR
-                    (sender_id = :user2 AND receiver_id = :user1)
-                ORDER BY created_at ASC";
+        $sql = "CALL sp_get_conversation(
+                    :user1,
+                    :user2
+                )";
 
         $query = $database->prepare($sql);
 
@@ -44,10 +43,10 @@ class MessageModel
     {
         $database = DatabaseFactory::getFactory()->getConnection();
 
-        $sql = "UPDATE messages
-                SET was_read = 1
-                WHERE sender_id = :sender_id
-                AND receiver_id = :receiver_id";
+        $sql = "CALL sp_mark_messages_read(
+                    :sender_id,
+                    :receiver_id
+                )";
 
         $query = $database->prepare($sql);
 
@@ -61,10 +60,9 @@ class MessageModel
     {
         $database = DatabaseFactory::getFactory()->getConnection();
 
-        $sql = "SELECT COUNT(*) AS amount
-                FROM messages
-                WHERE receiver_id = :user_id
-                AND was_read = 0";
+        $sql = "CALL sp_count_unread_messages(
+                    :user_id
+                )";
 
         $query = $database->prepare($sql);
 
@@ -81,10 +79,11 @@ class MessageModel
     {
         $database = DatabaseFactory::getFactory()->getConnection();
 
-        $sql = "INSERT INTO messages
-            (sender_id, group_id, message)
-            VALUES
-            (:sender_id, :group_id, :message)";
+        $sql = "CALL sp_send_group_message(
+                    :sender_id,
+                    :group_id,
+                    :message
+                )";
 
         $query = $database->prepare($sql);
 
@@ -99,14 +98,9 @@ class MessageModel
     {
         $database = DatabaseFactory::getFactory()->getConnection();
 
-        $sql = "SELECT
-                m.*,
-                u.user_name
-            FROM messages m
-            INNER JOIN users u
-                ON m.sender_id = u.user_id
-            WHERE m.group_id = :group_id
-            ORDER BY m.created_at ASC";
+        $sql = "CALL sp_get_group_conversation(
+                    :group_id
+                )";
 
         $query = $database->prepare($sql);
 
