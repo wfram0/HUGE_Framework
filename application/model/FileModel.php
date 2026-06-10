@@ -2,18 +2,23 @@
 
 class FileModel
 {
-    public static function getByUser($userID, $pdo)
+    public static function getByUser($userID)
     {
-        $stmt = $pdo->prepare("
+        $database = DatabaseFactory::getFactory()->getConnection();
+
+        $sql = "
             SELECT *
             FROM files
-            WHERE ownerID = ?
-        ");
+            WHERE ownerID = :ownerID
+            ORDER BY id DESC
+        ";
 
-        $stmt->execute([$userID]);
+        $query = $database->prepare($sql);
 
-        return $stmt->fetchAll();
+        $query->execute(array(
+            ':ownerID' => $userID
+        ));
+
+        return $query->fetchAll();
     }
 }
-
-?>

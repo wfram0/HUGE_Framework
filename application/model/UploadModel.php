@@ -2,31 +2,30 @@
 
 class UploadModel
 {
-    public static function upload($file, $userID, $pdo)
+    public static function upload($file, $userID)
     {
-        if ($file['error'] !== UPLOAD_ERR_OK) {
-            die("Fehler");
-        }
+        if ($file['error'] !== UPLOAD_ERR_OK) return;
+
+        $db = DatabaseFactory::getFactory()->getConnection();
 
         $name = time() . "_" . basename($file['name']);
         $size = $file['size'];
 
-        $uploadDir = dirname(__DIR__, 2) . "/Huge/userpictures/$userID";
+        $dir = dirname(__DIR__, 2) . "/user_pictures/$userID";
 
-        if (!is_dir($uploadDir)) {
-            mkdir($uploadDir, 0777, true);
-        }
+        if (!is_dir($dir)) mkdir($dir, 0777, true);
 
-        $ziel = $uploadDir . "/" . $name;
+        move_uploaded_file($file['tmp_name'], $dir . "/" . $name);
 
-        move_uploaded_file($file['tmp_name'], $ziel);
-
-        $stmt = $pdo->prepare("
+        $stmt = $db->prepare("
             INSERT INTO files (ownerID, name, size)
-            VALUES (?, ?, ?)
+            VALUES (:ownerID, :name, :size)
         ");
 
-        $stmt->execute([$userID, $name, $size]);
+        $stmt->execute([
+            ':ownerID' => $userID,
+            ':name' => $name,
+            ':size' => $size
+        ]);
     }
 }
-?>
