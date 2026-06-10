@@ -29,4 +29,70 @@ class GalleryController extends Controller
 
         Redirect::to('gallery');
     }
+
+    public function image($id)
+    {
+        $file = FileModel::getById($id);
+
+        if (!$file) {
+            die("File not found");
+        }
+
+        if ($file->ownerID != Session::get('user_id') && $file->shared == 0) {
+            die("No access");
+        }
+
+        $path = dirname(__DIR__, 2)
+            . '/user_pictures/'
+            . $file->ownerID
+            . '/'
+            . $file->name;
+
+        if (!file_exists($path)) {
+            die("Missing file");
+        }
+
+        header('Content-Type: ' . mime_content_type($path));
+        readfile($path);
+        exit;
+    }
+
+    public function delete($id)
+    {
+        FileModel::deleteFile($id, Session::get('user_id'));
+        Redirect::to('gallery');
+    }
+
+    public function download($id)
+    {
+        $file = FileModel::getById($id);
+
+        if (!$file) {
+            die("File not found");
+        }
+
+        if ($file->ownerID != Session::get('user_id') && $file->shared == 0) {
+            die("No access");
+        }
+
+        $path = dirname(__DIR__, 2)
+            . '/user_pictures/'
+            . $file->ownerID . '/'
+            . $file->name;
+
+        if (!file_exists($path)) {
+            die("Missing file");
+        }
+
+        // Counter erhöhen
+        FileModel::increaseDownload($id);
+
+        header('Content-Description: File Transfer');
+        header('Content-Type: application/octet-stream');
+        header('Content-Disposition: attachment; filename="' . $file->name . '"');
+        header('Content-Length: ' . filesize($path));
+
+        readfile($path);
+        exit;
+    }
 }
