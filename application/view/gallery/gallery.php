@@ -1,6 +1,4 @@
-<form method="post"
-      action="<?= Config::get('URL'); ?>gallery/upload"
-      enctype="multipart/form-data">
+<form method="post" action="<?= Config::get('URL'); ?>gallery/upload" enctype="multipart/form-data">
 
     <input type="file" name="datei">
     <button type="submit">Upload</button>
@@ -16,9 +14,15 @@
         <?php foreach ($this->files as $file) { ?>
 
             <div>
-
+                <img src="<?= Config::get('URL'); ?>gallery/image/<?= $file->id ?>" width="150">
                 <p><?= htmlentities($file->name); ?></p>
-
+                <a href="<?= Config::get('URL'); ?>gallery/delete/<?= $file->id ?>"
+                    onclick="return confirm('Wirklich löschen?')">
+                    Löschen
+                </a>
+                <a href="<?= Config::get('URL'); ?>gallery/download/<?= $file->id ?>">
+                    Download
+                </a>
             </div>
 
         <?php } ?>
