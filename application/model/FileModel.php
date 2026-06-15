@@ -80,4 +80,35 @@ class FileModel
         $query = $db->prepare($sql);
         $query->execute([':id' => $id]);
     }
+
+    public static function generateShareToken($id, $userID)
+    {
+        $db = DatabaseFactory::getFactory()->getConnection();
+
+        $token = bin2hex(random_bytes(16));
+
+        $sql = "UPDATE files
+            SET share_token = :token, shared = 1
+            WHERE id = :id AND ownerID = :ownerID";
+
+        $query = $db->prepare($sql);
+        $query->execute([
+            ':token' => $token,
+            ':id' => $id,
+            ':ownerID' => $userID
+        ]);
+
+        return $token;
+    }
+
+    public static function getByToken($token)
+    {
+        $db = DatabaseFactory::getFactory()->getConnection();
+
+        $sql = "SELECT * FROM files WHERE share_token = :token";
+        $query = $db->prepare($sql);
+        $query->execute([':token' => $token]);
+
+        return $query->fetch();
+    }
 }

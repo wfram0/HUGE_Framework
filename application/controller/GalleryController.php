@@ -95,4 +95,33 @@ class GalleryController extends Controller
         readfile($path);
         exit;
     }
+
+    public function share($id)
+    {
+        $token = FileModel::generateShareToken(
+            $id,
+            Session::get('user_id')
+        );
+
+        echo "Share Link: " . Config::get('URL') . "gallery/s/" . $token;
+    }
+
+    public function s($token)
+    {
+        $file = FileModel::getByToken($token);
+
+        if (!$file) {
+            die("Invalid link");
+        }
+
+        $path = dirname(__DIR__, 2)
+            . '/user_pictures/'
+            . $file->ownerID
+            . '/'
+            . $file->name;
+
+        header('Content-Type: ' . mime_content_type($path));
+        readfile($path);
+        exit;
+    }
 }
