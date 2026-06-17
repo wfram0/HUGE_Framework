@@ -124,4 +124,11 @@ class GalleryController extends Controller
         readfile($path);
         exit;
     }
+
+    public function feed()
+    {
+        $this->View->render('gallery/feed', [
+            'files' => FileModel::getSharedFiles()
+        ]);
+    }
 }
