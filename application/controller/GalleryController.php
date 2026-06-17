@@ -131,4 +131,24 @@ class GalleryController extends Controller
             'files' => FileModel::getSharedFiles()
         ]);
     }
+
+    public function like($id)
+    {
+        LikeModel::like(
+            Session::get('user_id'),
+            $id
+        );
+
+        Redirect::to('gallery/feed');
+    }
+
+    public function unlike($id)
+    {
+        LikeModel::unlike(
+            Session::get('user_id'),
+            $id
+        );
+
+        Redirect::to('gallery/feed');
+    }
 }
