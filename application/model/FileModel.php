@@ -111,4 +111,34 @@ class FileModel
 
         return $query->fetch();
     }
+
+    public static function getSharedFiles()
+    {
+        $db = DatabaseFactory::getFactory()->getConnection();
+
+        $sql = "
+        SELECT
+            files.*,
+            users.user_name,
+            COUNT(image_likes.file_id) AS likes
+        FROM files
+
+        INNER JOIN users
+            ON files.ownerID = users.user_id
+
+        LEFT JOIN image_likes
+            ON files.id = image_likes.file_id
+
+        WHERE files.shared = 1
+
+        GROUP BY files.id
+
+        ORDER BY files.id DESC
+    ";
+
+        $query = $db->prepare($sql);
+        $query->execute();
+
+        return $query->fetchAll();
+    }
 }
