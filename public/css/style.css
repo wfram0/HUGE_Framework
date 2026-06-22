@@ -309,3 +309,23 @@ body {
 
     margin-left: 5px;
 }
+
+.feed-post {
+    width: 300px;
+    margin: 15px auto;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    text-align: center;
+    background: #fff;
+}
+
+.feed-post img {
+    width: 100%;
+    max-width: 280px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+    display: block;
+    margin: 0 auto 10px auto;
+}
