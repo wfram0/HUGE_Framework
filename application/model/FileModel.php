@@ -141,4 +141,37 @@ class FileModel
 
         return $query->fetchAll();
     }
+
+    public static function getImageOfTheWeek()
+    {
+        $db = DatabaseFactory::getFactory()->getConnection();
+
+        $sql = "
+        SELECT
+            files.*,
+            users.user_name,
+            COUNT(image_likes.file_id) AS likes
+        FROM files
+
+        INNER JOIN users
+            ON files.ownerID = users.user_id
+
+        LEFT JOIN image_likes
+            ON files.id = image_likes.file_id
+
+        WHERE files.shared = 1
+        AND YEARWEEK(image_likes.created_at, 1) = YEARWEEK(NOW(), 1)
+
+        GROUP BY files.id
+
+        ORDER BY likes DESC
+
+        LIMIT 1
+    ";
+
+        $query = $db->prepare($sql);
+        $query->execute();
+
+        return $query->fetch();
+    }
 }

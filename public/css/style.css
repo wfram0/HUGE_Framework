@@ -329,3 +329,9 @@ body {
     display: block;
     margin: 0 auto 10px auto;
 }
+
+.image-of-the-week-title {
+    text-align: center;
+    color: #d4a017;
+    margin-top: 20px;
+}

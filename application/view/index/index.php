@@ -5,6 +5,26 @@
         <!-- echo out the system feedback (error and success messages) -->
         <?php $this->renderFeedbackMessages(); ?>
 
+        <?php if ($this->imageOfTheWeek) { ?>
+
+            <h2 class="image-of-the-week-title">🏆 Image of the Week</h2>
+
+            <div class="feed-post">
+
+                <img class="feed-image" src="<?= Config::get('URL'); ?>gallery/image/<?= $this->imageOfTheWeek->id ?>">
+
+                <div class="feed-user">
+                    <?= htmlentities($this->imageOfTheWeek->user_name) ?>
+                </div>
+
+                <div class="feed-likes">
+                    ❤️ <?= $this->imageOfTheWeek->likes ?>
+                </div>
+
+            </div>
+
+        <?php } ?>
+
         <h3>What happens here ?</h3>
         <p>
             This is the homepage. As no real URL-route (like /register/index) is provided, the app uses the default
